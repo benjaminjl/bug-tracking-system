@@ -1,18 +1,10 @@
 var dataTable;
+var currentBarNum = 0;
 
 google.charts.load('current', {'packages':['corechart']});
 //google.charts.setOnLoadCallback(drawChart);
 
-function drawChart() {
-	var data = google.visualization.arrayToDataTable([
-		['Day', 'Low', 'Open', 'Close', 'High'],
-		['Mon', 20, 28, 38, 45],
-		['Tue', 31, 38, 55, 66],
-		['Wed', 50, 55, 77, 80],
-		['Thu', 77, 77, 66, 50],
-		['Fri', 68, 66, 22, 15]
-		// Treat first row as data as well.
-	], false);
+function drawChart(numBars) {
 	
 	var options = {
 		legend:'none',
@@ -26,8 +18,42 @@ function drawChart() {
 	};
 
 	var chart = new google.visualization.CandlestickChart(document.getElementById('chart_div'));
+	
+	var newDataTable = new google.visualization.DataTable();
+	
+	// Set Cols
+	newDataTable.addColumn('string', 'Date');	// 0
+	newDataTable.addColumn('number', 'Low');		// 1
+	newDataTable.addColumn('number', 'Open');	// 2
+	newDataTable.addColumn('number', 'Close');	// 3
+	newDataTable.addColumn('number', 'High');	// 4
+	
+	
+	if (currentBarNum <= dataTable.og.length-1){
+		currentBarNum += numBars;
+		
+		for (var i = 0; i < currentBarNum; i++){
+			newDataTable.og[i] = dataTable.og[i];
+		}
+		
+		newDataTable.addRow();
+		newDataTable.addRow();
+		newDataTable.addRow();
+		newDataTable.addRow();
+		newDataTable.addRow();
+		
+		chart.draw(newDataTable, options);
+	}
+	
+	else{
+		alert("All bars for this Timeframe are loaded");
+		
+		chart.draw(dataTable, options);
+		
+		window.location.href = "http://127.0.0.1:59706/page.html";
+	}
 
-	chart.draw(dataTable, options);
+	
 }
 
 // Reading a File
@@ -99,7 +125,7 @@ function workWithData(results){
 				barNum += 1;
 				dataTable.addRow();
 				
-				dataTable.setCell(barNum-1, 0, tickData.data[i][0].substring(0, 19)); // Date - Substring to drop the milliseconds
+				dataTable.setCell(barNum-1, 0, tickData.data[i][0].substring(0, 16)); // Date - Substring to drop the milliseconds
 				
 				low  = tickData.data[i][2];
 				dataTable.setCell(barNum-1, 1, low);																	// Low - Initially set as same as Open
@@ -108,12 +134,11 @@ function workWithData(results){
 				
 				high = tickData.data[i][2];
 				dataTable.setCell(barNum-1, 4, high);																	// High - Initially set as same as Open
-				
 			}
 		}
 		
 	}
 	
 	//console.log(dataTable)
-	drawChart();
+	drawChart(15);
 }
