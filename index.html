@@ -1,13 +1,20 @@
 <!doctype html>
 
 <html>
-	<head>
-		<title>Page Title</title>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="initial-scale=1.0">
-	</head>
+  <head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="main.js"></script>
+    <script type="text/javascript" src="./papaparse.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+  </head>
+  <body>
+  
+		<p>Select local CSV File:</p>
+		<input id="csv" type="file" onchange="readFile(event)">
 
-	<body>
 
-	</body>
+		<div id="chart_div"></div>
+    
+  </body>
+  
 </html>

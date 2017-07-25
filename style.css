@@ -1,0 +1,8 @@
+html, body{
+	height: 100%;
+	overflow: scroll;
+}
+
+#chart_div{
+	height: 100%;
+}
